@@ -13,18 +13,19 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''#!/bin/bash
-                echo 'Test Step: We run testing tool like pytest here'
+                echo 'Test Step: Setting up virtual environment and running tests'
 
-                # TODO fill out the path to conda here
-                # sudo /PATH/TO/CONDA init
+                python3 -m venv venv
 
-                # TODO Complete the command to run pytest
-                # sudo /PATH/TO/CONDA run -n <Envinronment Name> <Command you want to run>
+                source venv/bin/activate
 
-                echo 'pytest not runned'
-                exit 1 #comment this line after implementing Jenkinsfile
+                pip install --upgrade pip
+                pip install pytest
+
+                pytest --maxfail=5 --disable-warnings
+
+                echo 'Tests completed successfully'
                 '''
-
             }
         }
         stage('Deploy') {
